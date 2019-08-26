@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1566828610271
+Build-Jdk: 11.0.3
+Built-By: chiel
+Bundle-Description: Maven parent POM for Java projects
+Bundle-License: https://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-ManifestVersion: 2
+Bundle-Name: spoofax-pygmentize-core
+Bundle-SymbolicName: spoofax-pygmentize-core
+Bundle-Vendor: ch.bruin
+Bundle-Version: 1.0.0.qualifier
+Created-By: Apache Maven Bundle Plugin
+Eclipse-BuddyPolicy: registered
+Embed-Transitive: true
+Export-Package: ch.bruin.spoofaxPygmentizeCore
+Import-Package: org.spoofax.interpreter.terms,org.spoofax.jsglr.client.i
+ mploder,org.spoofax.jsglr2,org.spoofax.jsglr2.imploder,org.spoofax.jsgl
+ r2.parseforest,org.spoofax.jsglr2.parser,org.spoofax.jsglr2.parser.resu
+ lt,org.spoofax.jsglr2.reducing,org.spoofax.jsglr2.stack,org.spoofax.jsg
+ lr2.stack.collections,org.spoofax.jsglr2.tokens,org.metaborg.parsetable
+ ,org.metaborg.parsetable.query,org.metaborg.parsetable.states,picocli;p
+ rovider=metaborg;mandatory:=provider;version=0
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+Tool: Bnd-2.4.1.201501161923
