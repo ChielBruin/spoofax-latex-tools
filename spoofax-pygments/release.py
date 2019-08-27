@@ -35,6 +35,6 @@ if __name__ == '__main__':
   shutil.copyfile(jar, os.path.join(tempfile.name, 'spoofax-pygmentize-core.jar'))
 
   print('Zipping files')
-  with zipfile.ZipFile('Release.zip', 'w', zipfile.ZIP_DEFLATED) as zip:
+  with zipfile.ZipFile('Spoofax-pygments-release.zip', 'w', zipfile.ZIP_DEFLATED) as zip:
     for file in os.listdir(tempfile.name):
       zip.write(os.path.join(tempfile.name, file), arcname=os.path.basename(file))
