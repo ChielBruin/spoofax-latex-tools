@@ -39,7 +39,8 @@ Available lexers:
 > I have not been able to get this to work on Overleaf. Presumably they do not have Java installed
 
 Extract the files in `Spoofax-pygments-release.zip` in the root of your Latex project.
-Now you can use the `spoofax-pygments-lexer` in the folowing way inside your Latex document:
+You can download this file on the releases page, or generate it yourself by running `python rease.py` in the `spoofax-pygments/`-folder.
+After unpacking the files, you can use the `spoofax-pygments-lexer` in the folowing way inside your Latex document:
 ```Latex
 \documentclass[twoside,a4paper,11pt]{memoir}
 
