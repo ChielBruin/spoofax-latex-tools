@@ -31,21 +31,27 @@ class AbstractSpoofaxLexer(Lexer):
     def get_tokens_unprocessed(self, text):
         out = subprocess.check_output(['java', '-jar', self.jar_location, '-pt', self.table_location] + self.arguments + [text])
         matches = re.findall(self.parse_regex, out)
-        for (start_index, end_index, sort, constructor) in matches:
-            start_idx = int(start_index)
-            end_idx = int(end_index)
-            end_idx = len(text) - 1 if end_idx == -1 else end_idx
-            sort = None if sort == 'null' else sort
-            constructor = None if constructor == 'null' else constructor
+        
+        if len(matches) is 0:
+            # There was some sort of parsing error
+            yield (0, Error, text)
+        else:
+            for (start_index, end_index, sort, constructor) in matches:
+                start_idx = int(start_index)
+                end_idx = int(end_index)
+                end_idx = len(text) - 1 if end_idx == -1 else end_idx
+                sort = None if sort == 'null' else sort
+                constructor = None if constructor == 'null' else constructor
             
-            type = self._get_type(sort, constructor)
-            yield (start_idx, type, text[start_idx:end_idx])
+                type = self._get_type(sort, constructor)
+                yield (start_idx, type, text[start_idx:end_idx])
 
     def analyse_text(text):
         # TODO: implement this function?
         return 0
 
     def _get_type(self, sort, constructor):
+        # Prefer a sort.constructor entry over a sort entry
         if not constructor is None:
             name = '%s.%s' % (sort, constructor)
             if name in self.types:
