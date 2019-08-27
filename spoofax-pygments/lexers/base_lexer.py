@@ -45,6 +45,7 @@ class AbstractSpoofaxLexer(Lexer):
             
                 type = self._get_type(sort, constructor)
                 yield (start_idx, type, text[start_idx:end_idx])
+            yield (len(text) - 1, Other, '\n')    # make sure the last token is always a newline, otherwise minted ignores the last token
 
     def analyse_text(text):
         # TODO: implement this function?
