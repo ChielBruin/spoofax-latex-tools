@@ -1,6 +1,9 @@
 package ch.bruin.spoofaxPygmentizeCore;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.metaborg.parsetable.IParseTable;
 import org.metaborg.parsetable.ParseTableReadException;
 import org.metaborg.parsetable.ParseTableReader;
@@ -8,16 +11,12 @@ import org.metaborg.parsetable.query.ActionsForCharacterRepresentation;
 import org.metaborg.parsetable.query.ProductionToGotoRepresentation;
 import org.metaborg.parsetable.states.IStateFactory;
 import org.metaborg.parsetable.states.StateFactory;
-import org.spoofax.interpreter.terms.ISimpleTerm;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.jsglr.client.imploder.IToken;
 import org.spoofax.jsglr2.*;
 import org.spoofax.jsglr2.imploder.ImploderVariant;
 import org.spoofax.jsglr2.parseforest.*;
-import org.spoofax.jsglr2.parseforest.hybrid.HybridDerivation;
-import org.spoofax.jsglr2.parseforest.hybrid.HybridParseNode;
-import org.spoofax.jsglr2.parser.IObservableParser;
 import org.spoofax.jsglr2.parser.IParser;
+import org.spoofax.jsglr2.parser.ParseException;
 import org.spoofax.jsglr2.parser.result.ParseFailure;
 import org.spoofax.jsglr2.parser.result.ParseResult;
 import org.spoofax.jsglr2.parser.result.ParseSuccess;
@@ -27,10 +26,6 @@ import org.spoofax.jsglr2.stack.collections.ActiveStacksRepresentation;
 import org.spoofax.jsglr2.stack.collections.ForActorStacksRepresentation;
 import org.spoofax.jsglr2.tokens.TokenizerVariant;
 
-import org.spoofax.jsglr2.tokens.Tokens;
-import org.spoofax.terms.StrategoAppl;
-import org.spoofax.terms.StrategoList;
-import org.spoofax.terms.StrategoString;
 import picocli.CommandLine;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Option;
@@ -126,67 +121,79 @@ public class JSGLR2CLI implements Runnable {
             IParseTable parseTable = getParseTable();
             JSGLR2Implementation<?, ?, IStrategoTerm> jsglr2 =
                     (JSGLR2Implementation<?, ?, IStrategoTerm>) JSGLR2Variants.getJSGLR2(parseTable, variant);
-            IObservableParser<?, ?> observableParser = (IObservableParser<?, ?>) jsglr2.parser;
 
-            outputStream = outputStream();
-
-            parse(jsglr2.parser);
-//            System.out.println("aaaaaaaaa");
-//            Tokens tokens = parseAndImplode(jsglr2);
+            List<PygmentizeToken> tokens = parse(jsglr2.parser);
+            System.out.println(tokens.toString());
         } catch(Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private void parse(IParser<?> parser) {
-        StringBuilder input_content = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(new File(input)))) {
-            while (true) {
-                String line = br.readLine();
-                if (line == null) break;
-                input_content.append(line);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private List<PygmentizeToken> parse(IParser<?> parser) throws ParseException {
+//        StringBuilder input_content = new StringBuilder();
+//        try (BufferedReader br = new BufferedReader(new FileReader(new File(input)))) {
+//            while (true) {
+//                String line = br.readLine();
+//                if (line == null) break;
+//                input_content.append(line);
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-        ParseResult<?> result = parser.parse(input_content.toString());
+        ParseResult<?> result = parser.parse(input);
 
         if(result.isSuccess()) {
             ParseSuccess<?> success = (ParseSuccess<?>) result;
 
-            // TODO: Probably check this cast
-            recurse_tree((IParseNode) success.parseResult);
-
-//            for (IDerivation derivation : ((HybridParseNode) success.parseResult).isAmbiguous()) {
-//                System.out.println(derivation.descriptor());
-//                System.out.println(derivation.production().constructor());
-//                System.out.println(derivation.productionType().name());
-//                System.out.println(derivation.width());
-//                System.out.println();
-//                System.out.println();
-//            }
+            if (success.parseResult instanceof  IParseNode) {
+                List<PygmentizeToken> tokens = new ArrayList<>();
+                recurse_tree((IParseNode) success.parseResult, tokens, 0);
+                return calculateEndIndices(tokens);
+            } else {
+                throw new IllegalStateException("The parse result is not an instance of IParseNode, found " + success.getClass().getName());
+            }
 
         } else {
             ParseFailure<?> failure = (ParseFailure<?>) result;
-            System.out.println(failure.exception().getMessage());
+            throw failure.exception();
         }
     }
 
-    private void recurse_tree(IParseNode node) {
+    private List<PygmentizeToken> calculateEndIndices(List<PygmentizeToken> tokens) {
+        if (tokens.size() > 0) {
+            for (int i = 0; i < tokens.size() - 1; i++) {
+                PygmentizeToken token = tokens.get(i);
+                token.setEndIndex(Math.max(token.getStartIndex(), tokens.get(i + 1).getStartIndex()));
+            }
+            PygmentizeToken token = tokens.get(tokens.size() - 1);
+            token.setEndIndex(-1);
+        }
+        return tokens;
+    }
+
+    private int recurse_tree(IParseNode node, List<PygmentizeToken> tokens, int index) {
         IDerivation derivation = node.getFirstDerivation();
-        for (IParseForest a : derivation.parseForests()) {
-            if (a instanceof IParseNode) {
-                IParseNode b = (IParseNode) a;
-                System.out.println(b.descriptor());
-                recurse_tree(b);
+
+        for (IParseForest pf : derivation.parseForests()) {
+            if (pf instanceof IParseNode) {
+                IParseNode parseNode = (IParseNode) pf;
+                PygmentizeToken token = PygmentizeToken.fromParseNode(parseNode, index);
+                if (token != null) {
+                    tokens.add(token);
+                }
+                index = recurse_tree(parseNode, tokens, index);
+            } else if (pf instanceof ICharacterNode) {
+                ICharacterNode charNode = (ICharacterNode) pf;
+                index++;
             } else {
-                // TODO: Error
+                throw new IllegalArgumentException("Error on:" + pf.toString());
             }
         }
+        return index;
     }
 
     private IParseTable getParseTable() throws Exception {
@@ -204,9 +211,4 @@ public class JSGLR2CLI implements Runnable {
             throw new Exception("Invalid parse table", e);
         }
     }
-
-    private OutputStream outputStream() throws Exception {
-        return System.out;
-    }
-
 }
