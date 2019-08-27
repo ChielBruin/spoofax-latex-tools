@@ -10,4 +10,5 @@ class FrameVMLexer(AbstractSpoofaxLexer):
             'SIntInstr': Keyword,
             'LABEL': Name.Function
         }
-        super(FrameVMLexer, self).__init__('FrameVMLexer', table_location, types, default_type=Text, **options)
+        arguments = ['--parseForest', 'LayoutSensitive', '--reducing', 'LayoutSensitive', '--stack', 'Basic']
+        super(FrameVMLexer, self).__init__('FrameVMLexer', table_location, types, default_type=Text, arguments=arguments, **options)
