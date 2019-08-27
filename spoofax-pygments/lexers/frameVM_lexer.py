@@ -3,7 +3,7 @@ from pygments.token import Text, Name, Number, String, Comment, Punctuation, Oth
 
 class FrameVMLexer(AbstractSpoofaxLexer):
     def __init__(self, **options):
-        table_location = 'target/metaborg/sdf.tbl'
+        table_location = 'fvm.tbl'
         types = {
             'INT': Number,
             'SIntInstr.STC_IPush': Text,
