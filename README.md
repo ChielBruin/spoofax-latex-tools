@@ -30,6 +30,7 @@ These lexers can be invoked within a `minted`-environment in Latex to color code
 
 New lexers can easily be added by providing a parsetable and a mapping from the parsetree-nodes to a Pygments token type.
 For a full list of available tokens, see [this page](http://pygments.org/docs/tokens/#keyword-tokens).
+If no token type could be found for a parsetree-node, the type of its parent is used recursively.
 
 
 Available lexers:
