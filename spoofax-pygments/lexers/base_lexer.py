@@ -8,7 +8,6 @@ from pygments.token import Comment, Error
 
 
 class AbstractSpoofaxLexer(Lexer):
-    parse_regex = r'\((?P<startIndex>[0-9]+), (?P<endIndex>-?[0-9]+), "(?P<sort>[A-Za-z0-9\_]+)", "(?P<constructor>[A-Za-z0-9\_]+)", \[(?P<children>.*)\]\)$'
     jar_location = os.path.abspath('spoofax-pygmentize-core.jar')
 
     name = None

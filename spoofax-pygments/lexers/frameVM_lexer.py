@@ -7,6 +7,9 @@ class FrameVMLexer(AbstractSpoofaxLexer):
         types = {
             'LAYOUT': Comment,
             'INT': Number.Integer,
+            'INTLEZ': Number.Integer,
+            'INTLZ': Number.Integer,
+            'CONTSLOT': Name.Constant,
             'SInstr': Keyword.Reserved,
             'SStackInstr': Keyword.Reserved,
             'SIntInstr': Keyword.Reserved,
