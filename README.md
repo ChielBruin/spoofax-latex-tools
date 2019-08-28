@@ -61,9 +61,15 @@ BLOCK2:
   \caption{Some nicely colored code example}
 \end{figure}
 
+\begin{figure}
+  \inputminted[firstline=5, lastline=9]{spoofax-lexer.py:FrameVMLexer -x}{test.stc}
+  \caption{Just a few lines this time}
+\end{figure}
+
 \end{document}
 
 ```
-Lastly, make sure to run the Latex compiler using `-shell-escape` for custom Minted lexers to work at all.
+The Spoofax lexer does only supports valid programs as input. If you want to have a colorized snippet of just a few lines from the middle of a program, you therefore have to use the `firstline` and `lastline` arguments to get those lines from a valid program.
+Lastly, make sure to run the Latex compiler using `-shell-escape` for Minted lexers to work at all.
 
 Latex swallows a lot of errors in its log with respect to the custom lexers. If you have trouble setting op the tool, you could try running pygments directly on the command-line, in order to identify the problem. The command for this is: `pygmentize -l spoofax-lexer.py:FrameVMLexer -x <SOME STRING TO PARSE>`
