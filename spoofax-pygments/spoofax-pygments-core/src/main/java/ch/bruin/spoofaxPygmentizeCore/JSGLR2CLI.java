@@ -120,24 +120,25 @@ public class JSGLR2CLI implements Runnable {
             JSGLR2Implementation<?, ?, IStrategoTerm> jsglr2 =
                     (JSGLR2Implementation<?, ?, IStrategoTerm>) JSGLR2Variants.getJSGLR2(parseTable, variant);
 
-            List<PygmentizeToken> tokens = parse(jsglr2.parser);
-            System.out.println(tokens.toString());
+            PygmentizeToken root = parse(jsglr2.parser);
+            System.out.println(root.toString());
         } catch(Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private List<PygmentizeToken> parse(IParser<?> parser) throws ParseException {
+    private PygmentizeToken parse(IParser<?> parser) throws ParseException {
         ParseResult<?> result = parser.parse(input);
 
         if(result.isSuccess()) {
             ParseSuccess<?> success = (ParseSuccess<?>) result;
 
-            if (success.parseResult instanceof  IParseNode) {
-                List<PygmentizeToken> tokens = new ArrayList<>();
-                recurse_tree((IParseNode) success.parseResult, tokens, 0);
-                return calculateEndIndices(tokens);
+            if (success.parseResult instanceof IParseNode) {
+                PygmentizeToken rootToken = new PygmentizeToken(0, null, null);
+                recurse_tree((IParseNode) success.parseResult, 0, rootToken);
+                calculateEndIndices(rootToken);
+                return rootToken;
             } else {
                 throw new IllegalStateException("The parse result is not an instance of IParseNode, found " + success.getClass().getName());
             }
@@ -148,7 +149,11 @@ public class JSGLR2CLI implements Runnable {
         }
     }
 
-    private List<PygmentizeToken> calculateEndIndices(List<PygmentizeToken> tokens) {
+    private void calculateEndIndices(PygmentizeToken root) {
+        // TODO: We need to do a proper tree walk here, but this was quick to hack from the previous version
+        ArrayList<PygmentizeToken> tokens = new ArrayList<>();
+        root.flatten(tokens);
+
         if (tokens.size() > 0) {
             for (int i = 0; i < tokens.size() - 1; i++) {
                 PygmentizeToken token = tokens.get(i);
@@ -157,10 +162,9 @@ public class JSGLR2CLI implements Runnable {
             PygmentizeToken token = tokens.get(tokens.size() - 1);
             token.setEndIndex(-1);
         }
-        return tokens;
     }
 
-    private int recurse_tree(IParseNode node, List<PygmentizeToken> tokens, int index) {
+    private int recurse_tree(IParseNode node, int index, PygmentizeToken parent) {
         IDerivation derivation = node.getFirstDerivation();
 
         for (IParseForest pf : derivation.parseForests()) {
@@ -168,9 +172,9 @@ public class JSGLR2CLI implements Runnable {
                 IParseNode parseNode = (IParseNode) pf;
                 PygmentizeToken token = PygmentizeToken.fromParseNode(parseNode, index);
                 if (token != null) {
-                    tokens.add(token);
+                    parent.add_child(token);
                 }
-                index = recurse_tree(parseNode, tokens, index);
+                index = recurse_tree(parseNode, index, token);
             } else if (pf instanceof ICharacterNode) {
                 ICharacterNode charNode = (ICharacterNode) pf;
                 index++;
