@@ -5,6 +5,7 @@ class FrameVMLexer(AbstractSpoofaxLexer):
     def __init__(self, **options):
         table_location = 'fvm.tbl'
         types = {
+            'LAYOUT': Comment,
             'INT': Number.Integer,
             'SInstr': Keyword.Reserved,
             'SStackInstr': Keyword.Reserved,
