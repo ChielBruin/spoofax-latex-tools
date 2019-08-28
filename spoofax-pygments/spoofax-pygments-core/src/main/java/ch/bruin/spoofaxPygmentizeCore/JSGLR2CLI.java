@@ -113,8 +113,6 @@ public class JSGLR2CLI implements Runnable {
         System.exit(exitCode);
     }
 
-    private OutputStream outputStream;
-
     public void run() {
         try {
             JSGLR2Variants.Variant variant = parserVariant.getVariant();
@@ -131,19 +129,6 @@ public class JSGLR2CLI implements Runnable {
     }
 
     private List<PygmentizeToken> parse(IParser<?> parser) throws ParseException {
-//        StringBuilder input_content = new StringBuilder();
-//        try (BufferedReader br = new BufferedReader(new FileReader(new File(input)))) {
-//            while (true) {
-//                String line = br.readLine();
-//                if (line == null) break;
-//                input_content.append(line);
-//            }
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
         ParseResult<?> result = parser.parse(input);
 
         if(result.isSuccess()) {
@@ -199,9 +184,6 @@ public class JSGLR2CLI implements Runnable {
     private IParseTable getParseTable() throws Exception {
         try {
             InputStream parseTableInputStream = new FileInputStream(parseTableFile);
-            IStateFactory stateFactory =
-                    new StateFactory(ActionsForCharacterRepresentation.standard(), ProductionToGotoRepresentation.standard());
-
             ParseTableReader parseTableReader = new ParseTableReader(new StateFactory());
 
             return parseTableReader.read(parseTableInputStream);
