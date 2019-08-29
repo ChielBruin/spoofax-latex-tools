@@ -7,6 +7,7 @@ def compose_lexers(tempfile, lexers):
       for line in base_lex.readlines():
         out_file.write(line)
     out_file.write('\n\n#########################\n# Lexer implementations #\n#########################\n\n')
+    out_file.write('from pygments.token import Text, Name, Number, String, Comment, Punctuation, Other, Keyword, Operator\n\n')
     
     for lexer in lexers:
       with open(lexer, 'r') as lex:
