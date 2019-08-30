@@ -47,8 +47,14 @@ class AbstractSpoofaxLexer(Lexer):
     def _tokens_from_dict(self, token, type_stack):
         sort = token['s']
         constructor = token['c']
-        type_stack = [(sort, constructor)] + type_stack
+        if sort == 'null':
+            sort = None
+        if constructor == 'null':
+            constructor = None
 
+        # Do not extend the stack with empty tokens, as we will not match these anyway
+        if not (sort is None and constructor is None):
+            type_stack = [(sort, constructor)] + type_stack
         type = self._get_type(type_stack)
         yield (token['si'], token['ei'], type)
         
@@ -64,6 +70,6 @@ class AbstractSpoofaxLexer(Lexer):
                 if name in self.types:
                     return self.types[name]
         
-            if sort in self.types:
+            if not sort is None and sort in self.types:
                 return self.types[sort]
         return self.default_type
