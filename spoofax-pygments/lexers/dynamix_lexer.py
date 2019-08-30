@@ -21,9 +21,10 @@ class DynamixLexer(AbstractSpoofaxLexer):
             'Module': Keyword.Declaration,
             'ModuleElem': Text,
 
-            'Definitions': Keyword.Declaration,
+            'Definitions': Keyword.Reserved,
             'Definition.Def': Text,
             'Definition.TypeDef': Name.Decorator,
-            'Instruction': Name.Keyword      
+            'Instruction.DNX_Return': Keyword.Reserved,
+            'Exp': Text     
         }
         super(DynamixLexer, self).__init__('DynamixLexer', table_location, types, default_type=Text, **options)
