@@ -17,14 +17,14 @@ def compose_lexers(tempfile, lexers):
 
 
 if __name__ == '__main__':
-  subprocess.call(['mvn', 'install'], cwd='spoofax-pygments-core')
+  subprocess.call(['mvn', 'install'], cwd='core')
   
   tempfile = tempfile.TemporaryDirectory()
   print('Using temporary file at: %s' % tempfile.name)
 
   sources = list(filter( lambda x: x.endswith('.py') and not x.endswith('base_lexer.py'), map(lambda x: os.path.join('lexers', x), os.listdir('lexers'))))
   tables = list(filter( lambda x: x.endswith('.tbl'), map(lambda x: os.path.join('lexers', 'tables', x), os.listdir('lexers/tables'))))
-  jar = os.path.join('spoofax-pygments-core', 'target', next(filter( lambda x: x.endswith('-shaded.jar'), os.listdir('spoofax-pygments-core/target'))))
+  jar = os.path.join('core', 'target', next(filter( lambda x: x.endswith('-shaded.jar'), os.listdir('core/target'))))
   
   print('Found %d lexer files and %d parse tables' % (len(sources), len(tables)))
 

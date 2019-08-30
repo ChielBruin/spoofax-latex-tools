@@ -2,14 +2,12 @@ package ch.bruin.spoofaxPygmentizeCore;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.metaborg.parsetable.IParseTable;
 import org.metaborg.parsetable.ParseTableReadException;
 import org.metaborg.parsetable.ParseTableReader;
 import org.metaborg.parsetable.query.ActionsForCharacterRepresentation;
 import org.metaborg.parsetable.query.ProductionToGotoRepresentation;
-import org.metaborg.parsetable.states.IStateFactory;
 import org.metaborg.parsetable.states.StateFactory;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr2.*;
@@ -31,8 +29,13 @@ import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-@CommandLine.Command(name = "JSGLR2 CLI", sortOptions = false)
-public class JSGLR2CLI implements Runnable {
+/**
+ * Parser interface for JSGLR2 to produce parse trees in JSON.
+ * Used as a backend for the Spoofax-pygments lexers.
+ * This is an adaption of the @see <a href="https://github.com/metaborg/jsglr/blob/master/org.spoofax.jsglr2.cli/src/main/java/org/spoofax/jsglr2/cli/JSGLR2CLI.java">JSGLR2CLI</a>.
+ */
+@CommandLine.Command(name = "Spoofax Pygments core", sortOptions = false)
+public class SpoofaxPygmentsCore implements Runnable {
 
     @Option(names = { "-pt", "--parseTable" }, required = true,
             description = "Parse table file") private File parseTableFile;
@@ -108,7 +111,7 @@ public class JSGLR2CLI implements Runnable {
     }
 
     public static void main(String[] args) {
-        int exitCode = new CommandLine(new JSGLR2CLI()).execute(args);
+        int exitCode = new CommandLine(new SpoofaxPygmentsCore()).execute(args);
 
         System.exit(exitCode);
     }
@@ -186,10 +189,8 @@ public class JSGLR2CLI implements Runnable {
     }
 
     private IParseTable getParseTable() throws Exception {
-        try {
-            InputStream parseTableInputStream = new FileInputStream(parseTableFile);
+        try (InputStream parseTableInputStream = new FileInputStream(parseTableFile)) {
             ParseTableReader parseTableReader = new ParseTableReader(new StateFactory());
-
             return parseTableReader.read(parseTableInputStream);
         } catch(IOException e) {
             throw new Exception("Invalid parse table file", e);
