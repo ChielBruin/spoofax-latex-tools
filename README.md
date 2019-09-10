@@ -34,7 +34,9 @@ If no token type could be found for a parsetree-node, the type of its parent is 
 
 
 Available lexers:
+- `DynamixLexer`
 - `FrameVMLexer`
+- `SDF3Lexer`
 
 ### Usage
 > I have not been able to get this to work on Overleaf. Presumably they do not have Java installed
