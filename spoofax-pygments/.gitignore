@@ -1,1 +1,3 @@
-Spoofax-pygments-release.zip
+/spoofax-pygmentize-core.jar
+__pycache__/
+*.pyc

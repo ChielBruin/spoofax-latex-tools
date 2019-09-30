@@ -28,23 +28,17 @@ Can be executed using `python sg2tikz.py sg.txt`, with the contents of `sg.txt` 
 A [Pygments](http://pygments.org/) lexer implementation for Spoofax languages.
 These lexers can be invoked within a `minted`-environment in Latex to color code snippets of Spoofax languages.
 
-New lexers can easily be added by providing a parsetable and a mapping from the parsetree-nodes to a Pygments token type.
-For a full list of available tokens, see [this page](http://pygments.org/docs/tokens/#keyword-tokens).
-If no token type could be found for a parsetree-node, the type of its parent is used recursively.
+New lexers can easily be added by providing a parsetable as `language` option to the lexer (see examples below).
 
-
-Available lexers:
-- `DynamixLexer`
-- `FrameVMLexer`
-- `SDF3Lexer`
+**TODO:** A later version of the Spoofax lexer should allow importing custom ESV coloring definitions.
 
 ### Usage
 > I have not been able to get this to work on Overleaf. Presumably they do not have Java installed
 
-Extract the files in `Spoofax-pygments-release.zip` in the root of your Latex project.
-You can download this file on the releases page, or generate it yourself by running `python release.py` in the `spoofax-pygments/`-folder.
-After unpacking the files, you can use the `spoofax-pygments-lexer` in the folowing way inside your Latex document:
-```Latex
+Add the files `spoofax-pygmentize-core.jar` and `spoofax_lexer.py` in the source root of your LaTeX project.
+You can download these files on the releases page, or generate them yourself by running `python3 release.py` in the `spoofax-pygments/`-folder.
+After copying the files, you can use the `spoofax_lexer` in the following way inside your LaTeX document:
+```latex
 \documentclass[twoside,a4paper,11pt]{memoir}
 
 \usepackage{minted}
@@ -53,7 +47,7 @@ After unpacking the files, you can use the `spoofax-pygments-lexer` in the folow
 
 \chapter{My Spoofax implementation}
 \begin{figure}
-  \begin{minted}{spoofax-lexer.py:FrameVMLexer -x}
+  \begin{minted}{spoofax_lexer.py -O "language=fvm.sdf3,preset=layoutSensitive" -x}
 BLOCK:
   ipush 0 // This is a comment
   return // Also a comment
@@ -65,14 +59,25 @@ BLOCK2:
 \end{figure}
 
 \begin{figure}
-  \inputminted[firstline=5, lastline=9]{spoofax-lexer.py:FrameVMLexer -x}{test.stc}
+  \inputminted[firstline=5, lastline=9]{spoofax_lexer.py -O "language=fvm.sdf3,preset=layoutSensitive" -x}{test.stc}
   \caption{Just a few lines this time}
 \end{figure}
 
-\end{document}
+\begin{figure}
+  \begin{minted}{spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template" -x}
+module test
 
+context-free syntax
+
+    Start = "Hello World!"
+  \end{minted}
+  \caption{Color coding using a language definition from Maven}
+\end{figure}
+
+\end{document}
 ```
+
 The Spoofax lexer does only supports valid programs as input. If you want to have a colorized snippet of just a few lines from the middle of a program, you therefore have to use the `firstline` and `lastline` arguments to get those lines from a valid program.
 Lastly, make sure to run the Latex compiler using `-shell-escape` for Minted lexers to work at all.
 
-Latex swallows a lot of errors in its log with respect to the custom lexers. If you have trouble setting op the tool, you could try running pygments directly on the command-line, in order to identify the problem. The command for this is: `pygmentize -l spoofax-lexer.py:FrameVMLexer -x <SOME STRING TO PARSE>`
+Latex swallows a lot of errors in its log with respect to the custom lexers. If you have trouble setting op the tool, you could try running pygments directly on the command-line, in order to identify the problem. The command for this is: `pygmentize -l spoofax_lexer.py -O "language=..." -x <SOME FILE TO PARSE>`
