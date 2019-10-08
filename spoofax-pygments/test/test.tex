@@ -1,0 +1,82 @@
+\documentclass{minimal}
+\usepackage{minted}
+\newcommand{\separate}{\vspace{1em}\hrule\vspace{1em}}
+\begin{document}
+
+\begin{minted}{../spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template" -x}
+module test
+
+start-symbols
+
+    Exp
+
+syntax
+
+    Exp.Add = Exp LAYOUT? "+" LAYOUT? Exp
+    Exp.Num = Int
+
+lexical syntax
+
+    LAYOUT = [\ \t\n\r]
+    Int = [0-9]+
+\end{minted}
+
+\separate
+
+\begin{minted}{../spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template" -x}
+module test
+
+syntax
+
+    Exp.Add = Exp LAYOUT? '+' LAYOUT? Exp
+\end{minted}
+
+\separate
+
+\begin{minted}{../spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template" -x}
+This one is broken
+\end{minted}
+
+\separate
+
+\begin{minted}{../spoofax_lexer.py -O "parseTable=sdf3.tbl" -x}
+module test // This one only has parse table
+syntax
+    Exp.Add = Exp "+" Exp
+\end{minted}
+
+\separate
+
+\begin{minted}{../spoofax_lexer.py -O "parseTable=sdf3.tbl,esv=../core/src/main/resources/defaulteditor.esv.af" -x}
+module test // This one has parse table and default ESV
+syntax
+    Exp.Add = Exp "+" Exp
+\end{minted}
+
+\separate
+
+\begin{minted}{../spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template,esv=../core/src/main/resources/defaulteditor.esv.af" -x}
+module test // This one has language and default ESV
+syntax
+    Exp.Add = Exp "+" Exp
+\end{minted}
+
+\separate
+
+\begin{minted}{../spoofax_lexer.py -O "language=org/metaborg/bogus" -x}
+This language does not exist
+\end{minted}
+
+\separate
+
+\begin{minted}{../spoofax_lexer.py -x}
+module test // This one has no language
+\end{minted}
+
+\separate
+
+\begin{minted}{java}
+class Test {}
+\end{minted}
+
+\end{document}

@@ -1,3 +1,6 @@
 /spoofax-pygmentize-core.jar
 __pycache__/
 *.pyc
+test/*
+!test/test.sh
+!test/test.tex

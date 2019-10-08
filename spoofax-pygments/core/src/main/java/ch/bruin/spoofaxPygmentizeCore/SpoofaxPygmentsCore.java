@@ -19,6 +19,9 @@ public class SpoofaxPygmentsCore extends JSGLR2CLI {
         outputProcessor = new DefaultOutputProcessor();
     }
 
+    @CommandLine.Option(names = {"--esv"}, description = "The ESV file to use for coloring the Pygments result")
+    public static String esvFile;
+
     public static void main(String[] args) {
         // No extra command-line options needed O:)
         JSGLR2CLI.outputProcessor = new PygmentsTokenOutput();
