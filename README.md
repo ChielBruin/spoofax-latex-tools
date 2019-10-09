@@ -38,27 +38,8 @@ Make sure to run the LaTeX compiler using `-shell-escape` for Minted lexers to w
 
 ```latex
 \documentclass{minimal}
-
 \usepackage{minted}
-
 \begin{document}
-
-\begin{figure}
-  \begin{minted}{spoofax_lexer.py -O "parseTable=fvm.sdf3,preset=layoutSensitive" -x}
-BLOCK:
-  ipush 0 // This is a comment
-  return // Also a comment
-BLOCK2:
-  ipush 0
-  return
-  \end{minted}
-  \caption{Some nicely colored code example}
-\end{figure}
-
-\begin{figure}
-  \inputminted[firstline=5, lastline=9]{spoofax_lexer.py -O "parseTable=fvm.sdf3,preset=layoutSensitive" -x}{test.stc}
-  \caption{Just a few lines this time}
-\end{figure}
 
 \begin{figure}
   \begin{minted}{spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template" -x}
@@ -68,7 +49,24 @@ context-free syntax
 
     Start = "Hello World!"
   \end{minted}
-  \caption{Coloring using a language definition from Maven}
+  \caption{Parsing and coloring using a language definition from Maven}
+\end{figure}
+
+\begin{figure}
+  \inputminted[firstline=5, lastline=9]{spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template" -x}{grammar.sdf3}
+  \caption{Parsing and coloring of just a few lines of the file grammar.sdf3}
+\end{figure}
+
+\begin{figure}
+  \begin{minted}{spoofax_lexer.py -O "parseTable=fvm/sdf3.tbl,esv=fvm/editor.esv.af,preset=layoutSensitive" -x}
+BLOCK:
+  ipush 0 // This is a comment
+  return // Also a comment
+BLOCK2:
+  ipush 0
+  return
+  \end{minted}
+  \caption{Parsing and coloring using a parse table and ESV definition in the fvm/ directory and a non-standard parser preset}
 \end{figure}
 
 \end{document}
@@ -85,7 +83,7 @@ Either the `language` or the `parseTable` option is required for the lexer to wo
 ### Limitations
 
 The Spoofax lexer does only supports complete, valid programs as input. This gives two limitations:
-- If you want to have a colorized snippet of just a few lines from the middle of a program, you therefore have to use the `firstline` and `lastline` arguments to get those lines from a valid program.
+- If you want to have a colorized snippet of just a few lines from the middle of a program, you have to use the `firstline` and `lastline` options of Minted to get those lines from a valid program.
 - The `escapeinline` option of Minted is not supported, because this causes Pygments to split up the file in multiple (incomplete) parts.
 
 ### Debugging
