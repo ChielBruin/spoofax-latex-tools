@@ -56,6 +56,17 @@
                         </goals>
                         <configuration>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <filters>
+                                <filter>
+                                    <artifact>org.metaborg:org.spoofax.jsglr2.cli</artifact>
+                                    <excludes>
+                                        <exclude>*</exclude><!-- Exclude all resources from the CLI project -->
+                                    </excludes>
+                                    <includes>
+                                        <include>org/**</include><!-- But include all java files -->
+                                    </includes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
