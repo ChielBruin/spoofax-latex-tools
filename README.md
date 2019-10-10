@@ -33,8 +33,10 @@ This lexer can be invoked within a `minted`-environment in LaTeX to color code s
 
 Add the files `spoofax-pygmentize-core.jar` and `spoofax_lexer.py` in the source root of your LaTeX project.
 You can download these files on the releases page, or take the Python file from the source and generate the JAR yourself by running `./release.sh` in the `spoofax-pygments/`-folder.
-After copying the files, you can use the `spoofax_lexer` in the following way inside your LaTeX document.
 Make sure to run the LaTeX compiler using `-shell-escape` for Minted lexers to work at all.
+
+Below, you find some examples of how to use the `spoofax_lexer` in your LaTeX document.
+You can find more examples in the [`test/`](test/test.tex) directory.
 
 ```latex
 \documentclass{minimal}
@@ -75,6 +77,8 @@ BLOCK2:
 The possible options for the lexer (passed via the `-O` argument) are:
 - `preset` - One of the parser presets supported by JSGLR2 (currently `standard` (default), `dataDependent`, `layoutSensitive`, `incremental`). Note that this setting is not automatically read from `metaborg.yaml` in case you use the `language` option.
 - `language` - The identifier of a Spoofax language in the local Maven repository, in the format `[groupId]/[artifactId]/[version]`, where the `groupId` is slash-separated, the `artifactId` is period-separated, and the `version` is optional. Examples: `org/metaborg/lang.java`, `org/metaborg/lang.java/1.1.0-SNAPSHOT`.
+
+  If you want to use a language that you don't want to build from source, but it is available on a Maven repository, you can download it to your local Maven repository using [this command](https://stackoverflow.com/a/1776808).
 - `parseTable` - A file reference to a parse table relative to the directory of `spoofax_lexer.py`. After building a language with Spoofax, this file can be grabbed from `target/metaborg/sdf.tbl`.
 - `esv` - A file reference to an ESV definition relative to the directory of `spoofax_lexer.py`. After building a language with Spoofax, this file can be grabbed from `target/metaborg/editor.esv.af`.
 
