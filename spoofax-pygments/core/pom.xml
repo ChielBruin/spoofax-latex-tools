@@ -60,11 +60,12 @@
                                 <filter>
                                     <artifact>org.metaborg:org.spoofax.jsglr2.cli</artifact>
                                     <excludes>
-                                        <exclude>*</exclude><!-- Exclude all resources from the CLI project -->
+                                        <!-- Exclude all integration resources from the CLI project -->
+                                        <exclude>*.tbl</exclude>
+                                        <exclude>grammars/**</exclude>
+                                        <exclude>parsetables/**</exclude>
+                                        <exclude>samples/**</exclude>
                                     </excludes>
-                                    <includes>
-                                        <include>org/**</include><!-- But include all java files -->
-                                    </includes>
                                 </filter>
                             </filters>
                         </configuration>
