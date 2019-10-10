@@ -24,7 +24,7 @@ class EmptyStyle(Style):
 #     "esv" - an `editor.esv.af` file to use for coloring
 #     "preset" - the JSGLR2 parser preset to use (e.g. layoutSensitive)
 class CustomLexer(Lexer):
-    jar_location = os.path.abspath('spoofax-pygmentize-core.jar')
+    jar_location = os.path.abspath("spoofax-pygmentize-core.jar")
 
     def __init__(self, **options):
         super(CustomLexer, self).__init__(**options)
