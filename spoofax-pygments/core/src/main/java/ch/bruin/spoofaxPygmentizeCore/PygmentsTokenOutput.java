@@ -133,7 +133,7 @@ public class PygmentsTokenOutput implements IOutputProcessor {
         final IStrategoTerm term = (IStrategoTerm) token.getAstNode();
         final IStrategoTerm parent = parentMap.get(term);
         if (term != null) {
-            SortAndConstructor sac = SortAndConstructor.getFromTerm(term, parent);
+            SortAndConstructor sac = SortAndConstructor.getFromTerm(stylerFacet, term, parent);
             if (sac != null) {
                 if (stylerFacet.hasSortConsStyle(sac.sort, sac.constructor)) {
                     String name = "CustomSortCons" + sac.sort + sac.constructor;

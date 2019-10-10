@@ -1,10 +1,11 @@
 \documentclass{minimal}
+\usepackage[a4paper,margin=2cm]{geometry}
 \usepackage{minted}
 \newcommand{\separate}{\vspace{1em}\hrule\vspace{1em}}
 \begin{document}
 
-\begin{minted}{../spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template" -x}
-module test
+\begin{minted}{spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template" -x}
+module test // Default: loading a language from Maven repository
 
 start-symbols
 
@@ -23,55 +24,59 @@ lexical syntax
 
 \separate
 
-\begin{minted}{../spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template" -x}
-module test
+\begin{minted}{spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template" -x}
+module test // Default: loading a language from Maven repository
 
 syntax
 
-    Exp.Add = Exp LAYOUT? '+' LAYOUT? Exp
+    Exp.Add = Exp LAYOUT? '+' LAYOUT? Exp // using CiLit '+' instead of Lit "+"
 \end{minted}
 
 \separate
 
-\begin{minted}{../spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template" -x}
+\begin{minted}{spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template" -x}
 This one is broken
 \end{minted}
 
 \separate
 
-\begin{minted}{../spoofax_lexer.py -O "parseTable=sdf3.tbl" -x}
-module test // This one only has parse table
+\begin{minted}{spoofax_lexer.py -O "parseTable=sdf3.tbl" -x}
+module test // This one only has parse table (thus loads default ESV)
 syntax
     Exp.Add = Exp "+" Exp
 \end{minted}
 
 \separate
 
-\begin{minted}{../spoofax_lexer.py -O "parseTable=sdf3.tbl,esv=../core/src/main/resources/defaulteditor.esv.af" -x}
-module test // This one has parse table and default ESV
+\begin{minted}{spoofax_lexer.py -O "parseTable=sdf3.tbl,esv=inverted.esv.af" -x}
+module test // This one has parse table and inverted ESV
 syntax
     Exp.Add = Exp "+" Exp
 \end{minted}
 
 \separate
 
-\begin{minted}{../spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template,esv=../core/src/main/resources/defaulteditor.esv.af" -x}
-module test // This one has language and default ESV
+\begin{minted}{spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template,esv=inverted.esv.af" -x}
+module test // This one has language and inverted ESV
 syntax
     Exp.Add = Exp "+" Exp
 \end{minted}
 
 \separate
 
-\begin{minted}{../spoofax_lexer.py -O "language=org/metaborg/bogus" -x}
+\begin{minted}{spoofax_lexer.py -O "language=org/metaborg/bogus" -x}
 This language does not exist
 \end{minted}
 
 \separate
 
-\begin{minted}{../spoofax_lexer.py -x}
+\begin{minted}{spoofax_lexer.py -x}
 module test // This one has no language
 \end{minted}
+
+\separate
+
+\inputminted[firstline=26]{spoofax_lexer.py -O "parseTable=dnx.tbl,esv=dnx.editor.esv.af" -x}{test.dnx}
 
 \separate
 

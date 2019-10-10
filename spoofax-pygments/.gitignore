@@ -2,6 +2,11 @@
 __pycache__/
 *.pyc
 test/*
+!test/dnx.editor.esv.af
+!test/dnx.tbl
+!test/inverted.esv.af
 !test/sdf3.tbl
+!test/spoofax_lexer.py
+!test/spoofax-pygmentize-core.jar
 !test/test.sh
 !test/test.tex
