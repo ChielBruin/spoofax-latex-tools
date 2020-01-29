@@ -4,6 +4,8 @@ from pygments.token import Comment, Error, Generic, Keyword, Literal, Name, Numb
 
 class SpoofaxStyle(Style):
     """
+    The default Spoofax colors.
+
     Source: https://github.com/metaborg/spoofax/blob/master/meta.lib.spoofax/editor/libspoofax/color/default.esv
     keyword    : 127 0 85 bold
     identifier : _
