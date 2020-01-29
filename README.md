@@ -1,9 +1,13 @@
 # Spoofax LaTeX tools
 > A collection of tools for writing about Spoofax in a LaTeX document
 
+- [sg2tikz](#sg2tikz) - Convert ascii-art scope graphs to LaTeX TikZ pictures
+- [Spoofax-pygments](#Spoofax-pygments) - Pygments lexer for Spoofax languages, can be used with `minted` in LaTeX
+- [Pygments style: Spoofax](#pygments_style_spoofax) - Pygments style with Spoofax colors, can be used for regular programming languages
+
 
 ## sg2tikz
-Convert a scope graph "drawn" in ascii-art to a `.tex` file containing the image as a Tikz picture.
+Convert a scope graph "drawn" in ascii-art to a `.tex` file containing the image as a TikZ picture.
 
 ### Usage
 Can be executed using `python sg2tikz.py sg.txt`, with the contents of `sg.txt` being:
@@ -93,3 +97,22 @@ The Spoofax lexer does only supports complete, valid programs as input. This giv
 ### Debugging
 
 LaTeX swallows a lot of errors in its log with respect to the custom lexers. If you have trouble setting op the tool, you could try running Pygments directly on the command-line, in order to identify the problem. The command for this is: `pygmentize -l spoofax_lexer.py -O "language=..." -x -f latex <SOME FILE TO PARSE>` (note that the custom lexer only supports the LaTeX formatter; other formatters like `html` or `terminal` are not supported)
+
+## Pygments style: Spoofax
+
+A Pygments style that uses the default Spoofax colors, which can be used for code snippets that are highlighted using existing Pygments lexers for general-purpose languages.
+
+### Installation
+
+This is a Python package that registers itself [as a plugin to Pygments](https://pygments.org/docs/plugins/) upon installation.
+Install using the following command, inside the `pygments_style_spoofax` directory:
+```bash
+$ (sudo) python3 setup.py install
+```
+
+### Usage
+
+After installation, this style can be used as follows:
+- Using Pygments from the command line: `pygmentize -S spoofax ...`
+- Using `minted` in LaTeX: `\usemintedstyle{spoofax}` or `\setminted{style=spoofax}`
+    - Set specifically for one language (e.g. Java): `\usemintedstyle[java]{spoofax}` or `\setminted[java]{style=spoofax}`
