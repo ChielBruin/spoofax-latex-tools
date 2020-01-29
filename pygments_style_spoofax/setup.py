@@ -9,7 +9,7 @@ setup(
     version='0.1',
     description='Pygments version of the Spoofax theme.',
     long_description='Pygments version of the Spoofax theme.',
-    keywords='pygments style github',
+    keywords='pygments style spoofax',
     license='GPLv3',
 
     packages=find_packages(),
