@@ -2,6 +2,6 @@
 
 set -e
 
-(cd core && mvn install)
+(cd core && mvn clean install)
 
 cp core/target/*-shaded.jar spoofax-pygmentize-core.jar

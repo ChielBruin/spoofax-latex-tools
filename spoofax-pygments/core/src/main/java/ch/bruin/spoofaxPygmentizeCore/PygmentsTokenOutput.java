@@ -1,7 +1,6 @@
 package ch.bruin.spoofaxPygmentizeCore;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.metaborg.core.style.IStyle;
 import org.metaborg.core.style.Style;
@@ -64,7 +63,7 @@ public class PygmentsTokenOutput implements IOutputProcessor {
                 esvInputStream = PygmentsTokenOutput.class.getResourceAsStream("/defaulteditor.esv.af");
             }
 
-            final TermReader reader = new TermReader(new TermFactory().getFactoryWithStorageType(IStrategoTerm.IMMUTABLE));
+            final TermReader reader = new TermReader(new TermFactory());
             final IStrategoTerm esvTerm = reader.parseFromStream(esvInputStream);
             final StylerFacet stylerFacet = StylerFacetFromESV.create((IStrategoAppl) esvTerm);
 
@@ -127,7 +126,6 @@ public class PygmentsTokenOutput implements IOutputProcessor {
         return parentMap;
     }
 
-    @NotNull
     private String mapTokenToPygmentizeToken(IToken token, StylerFacet stylerFacet, Map<String, IStyle> styleMap,
                                              Map<IStrategoTerm, IStrategoTerm> parentMap) {
         final IStrategoTerm term = (IStrategoTerm) token.getAstNode();
@@ -163,30 +161,30 @@ public class PygmentsTokenOutput implements IOutputProcessor {
 
     private String mapTokenKindToString(IToken token) {
         switch (token.getKind()) {
-            case IToken.TK_IDENTIFIER:
+            case TK_IDENTIFIER:
                 return "IDENTIFIER";
-            case IToken.TK_NUMBER:
+            case TK_NUMBER:
                 return "NUMBER";
-            case IToken.TK_STRING:
+            case TK_STRING:
                 return "STRING";
-            case IToken.TK_ERROR_KEYWORD:
-            case IToken.TK_KEYWORD:
+            case TK_ERROR_KEYWORD:
+            case TK_KEYWORD:
                 return "KEYWORD";
-            case IToken.TK_OPERATOR:
+            case TK_OPERATOR:
                 return "OPERATOR";
-            case IToken.TK_VAR:
+            case TK_VAR:
                 return "VAR";
-            case IToken.TK_ERROR_LAYOUT:
-            case IToken.TK_LAYOUT:
+            case TK_ERROR_LAYOUT:
+            case TK_LAYOUT:
                 return "LAYOUT";
             default:
-            case IToken.TK_UNKNOWN:
-            case IToken.TK_ERROR:
-            case IToken.TK_EOF:
-            case IToken.TK_ERROR_EOF_UNEXPECTED:
-            case IToken.TK_ESCAPE_OPERATOR:
-            case IToken.TK_RESERVED:
-            case IToken.TK_NO_TOKEN_KIND:
+            case TK_UNKNOWN:
+            case TK_ERROR:
+            case TK_EOF:
+            case TK_ERROR_EOF_UNEXPECTED:
+            case TK_ESCAPE_OPERATOR:
+            case TK_RESERVED:
+            case TK_NO_TOKEN_KIND:
                 return null;
         }
     }
