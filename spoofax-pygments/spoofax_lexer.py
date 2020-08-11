@@ -89,7 +89,6 @@ class CustomFormatter(LatexFormatter):
         class ExtraStyle(EmptyStyle, metaclass=StyleMeta):
             pass
 
-
         outfile.write("{\n")
 
         # Make sure that the settings for writing custom style commands (see next block) has the right settings.
