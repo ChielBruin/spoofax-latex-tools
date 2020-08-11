@@ -88,6 +88,32 @@ The possible options for the lexer (passed via the `-O` argument) are:
 
 Either the `language` or the `parseTable` option is required for the lexer to work. If only a `parseTable` is given, [this default ESV definition](https://github.com/metaborg/spoofax/blob/master/meta.lib.spoofax/editor/libspoofax/color/default.esv) is used for coloring.
 
+It is also possible to add the lexer string as a command in latex, allowing you to use it as a regular language in minted.
+```latex
+\documentclass{minimal}
+\usepackage{minted}
+\newcommand{\templateLang}{spoofax_lexer.py -O "language=org/metaborg/org.metaborg.meta.lang.template" -x}
+\setminted[\templateLang]{
+  xleftmargin=1em,
+  linenos,
+  autogobble
+}
+\begin{document}
+
+\begin{figure}
+  \begin{minted}{\templateLang}
+module test
+
+context-free syntax
+
+    Start = "Hello World!"
+  \end{minted}
+  \caption{Parsing and coloring using a language definition from Maven}
+\end{figure}
+
+\end{document}
+```
+
 ### Limitations
 
 The Spoofax lexer does only supports complete, valid programs as input. This gives two limitations:
