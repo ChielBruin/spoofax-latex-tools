@@ -98,7 +98,7 @@ class CustomFormatter(LatexFormatter):
             class ExtraStyle(EmptyStyle):
                 pass
         else:
-            class ExtraStyle(EmptyStyle):
+            class ExtraStyle(EmptyStyle, metaclass=StyleMeta):
                 pass
 
 
