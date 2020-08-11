@@ -9,7 +9,12 @@ from pygments.formatters.latex import LatexFormatter
 from pygments.lexer import Lexer
 from pygments.style import Style, StyleMeta
 from pygments.token import Token
-from pygments.util import add_metaclass
+# check if pygments still has a compatibility layer
+try:
+    from pygments.util import add_metaclass
+    has_deprecated_pygments = True
+except ImportError:
+    has_deprecated_pygments = False
 
 
 # Subclass of Style that we can mess with without interfering with the original implementation
@@ -88,9 +93,14 @@ class CustomFormatter(LatexFormatter):
 
         # This extra style class is created to trigger the __new__ method in StyleMeta, to initialize the styles
         # that have been set in the CustomLexer
-        @add_metaclass(StyleMeta)
-        class ExtraStyle(EmptyStyle):
-            pass
+        if has_deprecated_pygments:
+            @add_metaclass(StyleMeta)
+            class ExtraStyle(EmptyStyle):
+                pass
+        else:
+            class ExtraStyle(EmptyStyle):
+                pass
+
 
         outfile.write("{\n")
 
