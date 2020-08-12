@@ -9,8 +9,6 @@ from pygments.formatters.latex import LatexFormatter
 from pygments.lexer import Lexer
 from pygments.style import Style, StyleMeta
 from pygments.token import Token
-from pygments.util import add_metaclass
-
 
 # Subclass of Style that we can mess with without interfering with the original implementation
 class EmptyStyle(Style):
@@ -88,8 +86,7 @@ class CustomFormatter(LatexFormatter):
 
         # This extra style class is created to trigger the __new__ method in StyleMeta, to initialize the styles
         # that have been set in the CustomLexer
-        @add_metaclass(StyleMeta)
-        class ExtraStyle(EmptyStyle):
+        class ExtraStyle(EmptyStyle, metaclass=StyleMeta):
             pass
 
         outfile.write("{\n")
