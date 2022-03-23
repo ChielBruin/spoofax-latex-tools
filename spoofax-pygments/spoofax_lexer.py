@@ -92,9 +92,8 @@ class CustomFormatter(LatexFormatter):
         outfile.write("{\n")
 
         # Make sure that the settings for writing custom style commands (see next block) has the right settings.
-        # The command prefix is `PYGdefault` when no style has been set using `\usemintedstyle`.
+        # The command prefix is `PYG` when no style has been set using `\usemintedstyle`.
         cp = self.commandprefix
-        cp = (cp + "default") if cp == "PYG" else cp
         self.options["commandprefix"] = cp
         self.options["style"] = ExtraStyle
 
